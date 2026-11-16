@@ -1,35 +1,46 @@
+
 import streamlit as st
-print("================================")
-print("  โปรแกรมคำนวณส่วนลดสินค้า")
-print("================================")
 
-# รับข้อมูลจากผู้ใช้
-price = float(input("กรอกราคาสินค้า (บาท): "))
-discountPercent = float(input("กรอกส่วนลด (%): "))
+st.title("โปรแกรมคำนวณส่วนลดสินค้าและ VAT")
+st.write("คำนวณราคาสินค้าหลังหักส่วนลด พร้อมภาษี VAT 7%")
 
-# ตรวจสอบข้อมูล
-if price <= 0 or discountPercent < 0 or discountPercent > 100:
-    print("กรุณากรอกข้อมูลให้ถูกต้อง")
+st.divider()
 
-else:
+# รับข้อมูลสินค้า
+price = st.number_input(
+    "ราคาสินค้า (บาท)",
+    min_value=0.0,
+    value=1000.0
+)
+
+discountPercent = st.number_input(
+    "เปอร์เซ็นต์ส่วนลด (%)",
+    min_value=0.0,
+    max_value=100.0,
+    value=20.0
+)
+
+# ปุ่มคำนวณ
+if st.button("คำนวณราคา"):
+
     # คำนวณส่วนลด
     discount = price * discountPercent / 100
 
-    # คำนวณราคาหลังหักส่วนลด
+    # ราคาหลังหักส่วนลด
     afterDiscount = price - discount
 
     # คำนวณ VAT 7%
     vat = afterDiscount * 0.07
 
-    # คำนวณราคาสุทธิ
+    # ราคาสุทธิ
     total = afterDiscount + vat
 
-    # แสดงผลลัพธ์
-    print("\n========== ผลการคำนวณ ==========")
-    print("ราคาสินค้า:", format(price, ".2f"), "บาท")
-    print("ส่วนลด:", format(discount, ".2f"), "บาท")
-    print("ราคาหลังหักส่วนลด:", format(afterDiscount, ".2f"), "บาท")
-    print("VAT 7%:", format(vat, ".2f"), "บาท")
-    print("--------------------------------")
-    print("ราคาสุทธิที่ต้องจ่าย:", format(total, ".2f"), "บาท")
-    print("================================")
+    st.divider()
+    st.subheader("ผลการคำนวณ")
+
+    st.write(f"ราคาสินค้า: {price:,.2f} บาท")
+    st.write(f"ส่วนลด: {discount:,.2f} บาท")
+    st.write(f"ราคาหลังหักส่วนลด: {afterDiscount:,.2f} บาท")
+    st.write(f"VAT 7%: {vat:,.2f} บาท")
+
+    st.success(f"ราคาสุทธิที่ต้องจ่าย: {total:,.2f} บาท")
